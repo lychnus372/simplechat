@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>simple chat</title>
+    <style>
+        #timeline {
+            list-style-type: none;
+        }
+        #timeline div:nth-child(odd) {
+            background: #eee;
+        }
+        #timeline div{
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+
+
+    <h2>simple chat app</h2>
+    <div id="timeline"></div>
+    <form id="chatSend" action="">
+        <input id="chatText">
+        <button class="sendButton">送信</button>
+    </form>
+
+    <script>
+        const socket = io();
+        document.getElementsByTagName('button')[0]
+            .addEventListener('click', e=>{
+                const input = document.getElementsByTagName('input')[0];
+                socket.emit('chat message', input.value);
+                input.value = '';
+                e.preventDefault();
+            });
+        socket.on('chat message', msg=>{
+            const li = document.createElement('div');
+            li.innerText = msg;
+            document.getElementById('timeline').appendChild(li);;
+        });
+    </script>
+</body>
+</html>
